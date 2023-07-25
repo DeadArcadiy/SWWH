@@ -1,2 +1,6 @@
 arabidopsis/
 .DS_Store
+*.png
+*.jpg
+test.ipynb
+segmentation.ipynb
