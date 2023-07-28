@@ -1,4 +1,6 @@
 arabidopsis/
+cropped/
+plant_segmentation/
 .DS_Store
 /venv
 .idea
