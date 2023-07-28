@@ -12,7 +12,9 @@ class ImageCropper:
     def __init__(self, path, name):
         #        self.path = path
         #        self.name = name
-        self.image = cv2.imread(path + name + ".JPG")
+        self.image = cv2.imread(path + name + ".JPG", 3)
+        b, g, r = cv2.split(self.image)
+        self.image = cv2.merge([r, g, b])
 
     def rectangle_crop(self):
         rectangle_cropped_image = None
