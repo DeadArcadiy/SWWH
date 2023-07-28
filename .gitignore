@@ -1,6 +1,9 @@
 arabidopsis/
+cropped/
+plant_segmentation/
 .DS_Store
+/venv
+.idea
 *.png
 *.jpg
-test.ipynb
-segmentation.ipynb
+__pycache__
