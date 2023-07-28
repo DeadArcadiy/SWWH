@@ -14,7 +14,7 @@ class ImageCropper:
         self.save_path = save_path
 
     def image_maker(self, name):
-        image = cv2.imread(self.path + name + ".JPG", 3)
+        image = cv2.imread(self.path + name, 3)
         b, g, r = cv2.split(image)
         image = cv2.merge([r, g, b])
         return image
@@ -34,17 +34,18 @@ class ImageCropper:
 
         for c in cnts:
             x, y, weight, height = cv2.boundingRect(c)
-            if weight > 500 and height > 500:
-                cv2.rectangle(image,
-                              (x, y),
-                              (x + weight, y + height),
-                              (36, 255, 12),
-                              2)
-                rectangle_cropped_image = original[y:y + height, x:x + weight]
+            if weight > 1000 and height > 1000:
+                if abs(weight - height) < 500:
+                    cv2.rectangle(image,
+                                (x, y),
+                                (x + weight, y + height),
+                                (36, 255, 12),
+                                2)
+                    rectangle_cropped_image = original[y:y + height, x:x + weight]
         if rectangle_cropped_image is not None:
             return rectangle_cropped_image
         else:
-            raise Exception
+            return None
 
     @staticmethod
     def circle_crop(self, rectangle_cropped_image):
@@ -55,6 +56,15 @@ class ImageCropper:
                            int(diametr / 2 - diametr / 20),
                            (255, 255, 255),
                            -1)
-        circle_cropped_image = cv2.cvtColor(rectangle_cropped_image, cv2.COLOR_BGR2BGRA)
+        circle_cropped_image = cv2.cvtColor(rectangle_cropped_image, cv2.COLOR_BGR2RGBA)
         circle_cropped_image[:, :, 3] = mask1[:, :, 0]
         return circle_cropped_image
+    
+    def crop_image(self,name):
+        img = ImageCropper.image_maker(self,name)
+        recimg = ImageCropper.rectangle_crop(self,img)
+        if recimg is not None:
+            res =  ImageCropper.circle_crop(self,recimg)
+            cv2.imwrite(self.save_path+name[:-3]+'png',res)
+        else:
+            print('Bad image name:' + name)

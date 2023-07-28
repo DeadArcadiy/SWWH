@@ -2,3 +2,6 @@ arabidopsis/
 .DS_Store
 /venv
 .idea
+*.png
+*.jpg
+__pycache__
