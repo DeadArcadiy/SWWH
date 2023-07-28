@@ -1,2 +1,4 @@
 arabidopsis/
 .DS_Store
+/venv
+.idea
