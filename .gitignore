@@ -7,3 +7,4 @@ plant_segmentation/
 *.png
 *.jpg
 __pycache__
+segmentation.ipynb
