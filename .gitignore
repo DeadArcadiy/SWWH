@@ -9,3 +9,4 @@ castom-masks/
 *.png
 *.jpg
 __pycache__
+bestmodel/
