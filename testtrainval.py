@@ -10,7 +10,7 @@ savetrain = 'crosval/train/'
 savetest = 'crosval/test/'
 saveval = 'crosval/val/'
 
-if not os.path.isfile('crosval/'):
+if os.path.isdir('crosval/'):
     shutil.rmtree('crosval/')
 os.makedirs(savetest)
 os.makedirs(savetrain)

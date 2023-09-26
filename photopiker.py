@@ -11,7 +11,7 @@ path = 'cropped/'
 allimages = os.listdir(path)
 destination = 'for_labeling/'
 
-if not os.path.isfile(destination):
+if os.path.isdir(destination):
     shutil.rmtree(destination)
 os.makedirs(destination)
 
