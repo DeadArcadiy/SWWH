@@ -4,8 +4,12 @@ import shutil
 
 visited = {}
 
+counter = 0
 for file in os.listdir('castom-masks/img/'):
     visited[file] = 0
+    counter += 1
+
+print(counter)
 
 path = 'cropped/'
 allimages = os.listdir(path)
