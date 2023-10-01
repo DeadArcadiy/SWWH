@@ -18,8 +18,8 @@ os.makedirs(saveval)
 
 for file in ls:
     a = int(random.random() * 100)
-    if a % 4 == 0:
-        if a % 3 != 0:
+    if a % 3 == 0:
+        if a % 4 != 0:
             shutil.copyfile(path+file,saveval+file)
         else:
             shutil.copyfile(path+file,savetest+file)
