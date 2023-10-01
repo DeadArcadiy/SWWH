@@ -9,7 +9,7 @@ castom-masks/
 *.png
 *.jpg
 __pycache__
-bestmodel*
+*bestmodel*
 result/
 *.h5
 for_labeling/
