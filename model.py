@@ -1,6 +1,8 @@
 import tensorflow as tf
 import numpy as np
 
+HEIGHT = 512
+
 class ModelCreator:
     #unet
     #encoder x:
@@ -25,7 +27,7 @@ class ModelCreator:
 
 
     def buildmodel(this):
-        inputlayer = tf.keras.layers.Input(shape=(256,256,3))
+        inputlayer = tf.keras.layers.Input(shape=(HEIGHT,HEIGHT,3))
         print(inputlayer)
         e1 = this.encoder_x(inputlayer,64)
         e2 = this.encoder_x(e1,128)
