@@ -3,8 +3,9 @@ import os
 import albumentations as albu
 
 class DatasetCreator:
-    def __init__(self, preprocess) -> None:
+    def __init__(self, preprocess,transforms: albu.Compose) -> None:
         self.preprocess = preprocess
+        self.transforms = transforms
 
     def get_mask(self, image: tf.Tensor) -> tf.Tensor:
         return tf.strings.split(image, os.path.sep)[-1]
@@ -30,10 +31,9 @@ class DatasetCreator:
     def process_data(self, image: tf.Tensor, mask: tf.Tensor) -> (tf.Tensor, tf.Tensor):
         return tf.numpy_function(self.aug_fn, inp=(image, mask), Tout=(tf.float32, tf.float32))
 
-    def __call__(self, imagepath: str, maskspath: str, transforms: albu.Compose, shuffle_buffer_size: int = 100, batch_size: int = 4):
+    def __call__(self, imagepath: str, maskspath: str, shuffle_buffer_size: int = 100, batch_size: int = 4):
         dataset = tf.data.Dataset.list_files(imagepath)
         dataset = dataset.map(lambda x: self.process_image_with_mask(x, maskspath))
-        self.transforms = transforms
         dataset = dataset.map(lambda x, y: self.process_data(x, y))
         dataset = dataset.shuffle(shuffle_buffer_size)
         return dataset.batch(batch_size)
