@@ -6,15 +6,15 @@ HEIGHT = 512
 class ModelCreator:
     #unet
     #encoder x:
-    def encoder_x(this,x,n_filters):
-        x = tf.keras.layers.Conv2D(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
+    def encoder_x(this,input,n_filters):
+        x = tf.keras.layers.Conv2D(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(input)
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.LeakyReLU()(x)
         return x
 
     #decoder_x:
-    def decoder_x(this,x,skip_connections,n_filters):
-        x = tf.keras.layers.concatenate([x,skip_connections])
+    def decoder_x(this,input,skip_connections,n_filters):
+        x = tf.keras.layers.concatenate([input,skip_connections])
         x = tf.keras.layers.Conv2DTranspose(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.Dropout(0.25)(x)
@@ -35,8 +35,9 @@ class ModelCreator:
         e4 = this.encoder_x(e3,512)
         e5 = this.encoder_x(e4,512)
         e6 = this.encoder_x(e5,512)
-        e7 = this.encoder_x(e6,512)
-        x = this.decoder_x(e7,e7,512)
+        x = this.encoder_x(e6,512)
+        x = tf.keras.layers.Conv2DTranspose(512, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
+        x = tf.keras.layers.ReLU()(x)
         x = this.decoder_x(x,e6,512)
         x = this.decoder_x(x,e5,512)
         x = this.decoder_x(x,e4,256)

@@ -16,6 +16,7 @@ os.makedirs(savetest)
 os.makedirs(savetrain)
 os.makedirs(saveval)
 
+ls.sort()
 random.shuffle(ls)
 
 for i,file in enumerate(ls):
