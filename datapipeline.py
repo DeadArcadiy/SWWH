@@ -37,3 +37,32 @@ class DatasetCreator:
         dataset = dataset.map(lambda x, y: self.process_data(x, y))
         dataset = dataset.shuffle(shuffle_buffer_size)
         return dataset.batch(batch_size)
+
+
+
+class DatasetCreatorTest:
+    def __init__(self, preprocess,transforms: albu.Compose) -> None:
+        self.preprocess = preprocess
+        self.transforms = transforms
+
+    def process_image(self, file_path: tf.Tensor) -> (tf.Tensor):
+        image = tf.io.read_file(file_path)
+        image = tf.image.decode_image(image)
+        return tf.cast(image, tf.uint8)
+
+    def aug_fn(self, image: tf.Tensor) -> (tf.Tensor):
+        image = image[:,:,:3]
+        data = {"image": image}
+        aug_data = self.transforms(**data)
+        image = aug_data["image"]
+        return self.preprocess(tf.cast(image, tf.float32))
+
+    def process_data(self, image: tf.Tensor) -> (tf.Tensor):
+        return tf.numpy_function(self.aug_fn, inp=[image], Tout=(tf.float32))
+
+    def __call__(self, imagepath: str, shuffle_buffer_size: int = 100, batch_size: int = 4):
+        dataset = tf.data.Dataset.list_files(imagepath)
+        dataset = dataset.map(lambda x: self.process_image(x))
+        dataset = dataset.map(lambda x: self.process_data(x))
+        dataset = dataset.shuffle(shuffle_buffer_size)
+        return dataset.batch(batch_size)
