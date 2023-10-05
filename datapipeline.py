@@ -3,8 +3,7 @@ import os
 import albumentations as albu
 
 class DatasetCreator:
-    def __init__(self, preprocess,transforms: albu.Compose) -> None:
-        self.preprocess = preprocess
+    def __init__(self,transforms: albu.Compose) -> None:
         self.transforms = transforms
 
     def get_mask(self, image: tf.Tensor) -> tf.Tensor:
@@ -26,7 +25,7 @@ class DatasetCreator:
         aug_data = self.transforms(**data)
         image = aug_data["image"]
         mask = aug_data["mask"]
-        return self.preprocess(tf.cast(image, tf.float32)), tf.cast(mask, tf.float32)
+        return tf.cast(image, tf.float32), tf.cast(mask, tf.float32)
 
     def process_data(self, image: tf.Tensor, mask: tf.Tensor) -> (tf.Tensor, tf.Tensor):
         return tf.numpy_function(self.aug_fn, inp=(image, mask), Tout=(tf.float32, tf.float32))
@@ -41,8 +40,7 @@ class DatasetCreator:
 
 
 class DatasetCreatorTest:
-    def __init__(self, preprocess,transforms: albu.Compose) -> None:
-        self.preprocess = preprocess
+    def __init__(self,transforms: albu.Compose) -> None:
         self.transforms = transforms
 
     def process_image(self, file_path: tf.Tensor) -> (tf.Tensor):
@@ -55,7 +53,7 @@ class DatasetCreatorTest:
         data = {"image": image}
         aug_data = self.transforms(**data)
         image = aug_data["image"]
-        return self.preprocess(tf.cast(image, tf.float32))
+        return tf.cast(image, tf.float32)
 
     def process_data(self, image: tf.Tensor) -> (tf.Tensor):
         return tf.numpy_function(self.aug_fn, inp=[image], Tout=(tf.float32))
