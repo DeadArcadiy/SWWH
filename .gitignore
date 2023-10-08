@@ -13,3 +13,4 @@ __pycache__
 result/
 *.h5
 for_labeling/
+segmentation.ipynb
