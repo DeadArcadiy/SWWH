@@ -1,10 +1,16 @@
 arabidopsis/
 cropped/
 plant_segmentation/
+models/
+castom-masks/
 .DS_Store
 /venv
 .idea
 *.png
 *.jpg
 __pycache__
+*bestmodel*
+result/
+*.h5
+for_labeling/
 segmentation.ipynb
