@@ -16,13 +16,14 @@ os.makedirs(savetest)
 os.makedirs(savetrain)
 os.makedirs(saveval)
 
+print(len(ls))
 ls.sort()
 random.shuffle(ls)
 
 for i,file in enumerate(ls):
-    if i < 30:
+    if i <= 30:
         shutil.copyfile(path+file,saveval+file)
-    elif i < 40:
+    elif i <= 40:
         shutil.copyfile(path+file,savetest+file)
     else:
         shutil.copyfile(path+file,savetrain+file)
