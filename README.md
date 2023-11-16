@@ -41,3 +41,4 @@ Below are some sample segmentation results produced by the model:
 
 | Original Image | Segmented Image |
 | --- | --- |
+| ![Original Image 1](output.png) | ![Segmented Image 1](output1.png) |
