@@ -23,3 +23,21 @@ The model is a U-Net architecture, known for its efficiency in image segmentatio
 Before running the project, ensure the following dependencies are installed:
 ```bash
 pip install tensorflow numpy albumentations segmentation-models matplotlib opencv-python-headless wandb
+```
+## Dataset
+
+The dataset consists of high-resolution images of root structures. The `DatasetCreator` class in `datapipeline.py` is used to preprocess and augment the images for training.
+
+## Training
+
+Training details:
+- TensorFlow as the backend.
+- Custom callbacks for monitoring and logging.
+- Wandb integration for experiment tracking.
+
+## Results
+
+Below are some sample segmentation results produced by the model:
+
+| Original Image | Segmented Image |
+| --- | --- |
