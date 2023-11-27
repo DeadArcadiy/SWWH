@@ -14,7 +14,7 @@ class ModelCreator:
         return x
 
     #decoder_x:
-    def decoder_x(this,input,skip_connections,n_filters,dropout = 0.25):
+    def decoder_x(this,input,skip_connections,n_filters,dropout = 0):
         x = tf.keras.layers.concatenate([input,skip_connections])
         x = tf.keras.layers.Conv2DTranspose(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
         x = tf.keras.layers.BatchNormalization()(x)
@@ -30,17 +30,17 @@ class ModelCreator:
     def buildmodel(this):
         inputlayer = tf.keras.layers.Input(shape=(HEIGHT,HEIGHT,3))
         print(inputlayer)
-        e1 = this.encoder_x(inputlayer,32)
-        e2 = this.encoder_x(e1,64)
-        e3 = this.encoder_x(e2,128)
-        e4 = this.encoder_x(e3,256)
-        x = this.encoder_x(e4,512)
-        x = tf.keras.layers.Conv2DTranspose(512, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
+        e1 = this.encoder_x(inputlayer,48)
+        e2 = this.encoder_x(e1,48)
+        e3 = this.encoder_x(e2,176)
+        e4 = this.encoder_x(e3,416)
+        x = this.encoder_x(e4,128)
+        x = tf.keras.layers.Conv2DTranspose(128, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
         x = tf.keras.layers.LeakyReLU()(x)
-        x = this.decoder_x(x,e4,256)
-        x = this.decoder_x(x,e3,128)
-        x = this.decoder_x(x,e2,64)
-        x = this.decoder_x(x,e1,32)
+        x = this.decoder_x(x,e4,416)
+        x = this.decoder_x(x,e3,176)
+        x = this.decoder_x(x,e2,48)
+        x = this.decoder_x(x,e1,48)
         outputlayer = this.output(x)
         print(outputlayer)
         
