@@ -8,18 +8,18 @@ class ModelCreator:
     #unet
     #encoder x:
     def encoder_x(this,input,n_filters):
-        x = tf.keras.layers.Conv2D(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(input)
+        x = tf.keras.layers.Conv2D(n_filters, 3,padding = "same", kernel_initializer = "he_normal",use_bias=False)(input)
+        x = tf.keras.layers.MaxPool2D(pool_size=(2, 2))(x)
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.LeakyReLU()(x)
         return x
 
     #decoder_x:
-    def decoder_x(this,input,skip_connections,n_filters,dropout = 0):
+    def decoder_x(this,input,skip_connections,n_filters):
         x = tf.keras.layers.concatenate([input,skip_connections])
         x = tf.keras.layers.Conv2DTranspose(n_filters, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
         x = tf.keras.layers.BatchNormalization()(x)
-        x = tf.keras.layers.Dropout(dropout)(x)
-        x = tf.keras.layers.LeakyReLU()(x)
+        x = tf.keras.layers.ReLU()(x)
         return x
 
     #output
@@ -65,11 +65,10 @@ class ModelCreator:
         x = this.encoder_x(e4,layer5)
         x = tf.keras.layers.Conv2DTranspose(layer5, 3, strides= 2,padding = "same", kernel_initializer = "he_normal",use_bias=False)(x)
         x = tf.keras.layers.ReLU()(x)
-        dropout = hp.Float('dropout', min_value=0, max_value=0.7, step=0.1)
-        x = this.decoder_x(x,e4,layer4,dropout)
-        x = this.decoder_x(x,e3,layer3,dropout)
-        x = this.decoder_x(x,e2,layer2,dropout)
-        x = this.decoder_x(x,e1,layer1,dropout)
+        x = this.decoder_x(x,e4,layer4)
+        x = this.decoder_x(x,e3,layer3)
+        x = this.decoder_x(x,e2,layer2)
+        x = this.decoder_x(x,e1,layer1)
         outputlayer = this.output(x)
         print(outputlayer)
         
