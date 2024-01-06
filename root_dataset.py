@@ -25,6 +25,7 @@ class Root_dataset(torch.utils.data.Dataset):
         transformed_mask = torch.Tensor(transformed_mask)
         transformed_image = transformed_image.permute((2, 0, 1))
         transformed_mask = transformed_mask.permute((2, 0, 1))
+        transformed_image /= 255
         return transformed_image.to(self.device),transformed_mask.to(self.device)
             
             
