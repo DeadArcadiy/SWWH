@@ -6,7 +6,6 @@ castom-masks/
 .DS_Store
 /venv
 .idea
-*.png
 *.jpg
 __pycache__
 *bestmodel*
@@ -14,3 +13,8 @@ result/
 *.h5
 for_labeling/
 wandb
+output/*
+crosval/*
+test.png
+Screenshot 2023-11-04 at 21.17.03.png
+*.pt
