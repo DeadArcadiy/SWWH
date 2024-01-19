@@ -14,12 +14,22 @@ class UNet(nn.Module):
 
         # Decoder
         self.decoder1 = self.decoder_block(512, 256)
-        self.decoder2 = self.decoder_block(256, 128)
-        self.decoder3 = self.decoder_block(128, 64)
-        self.decoder4 = self.decoder_block(64, 32)
+        self.decoder2 = self.decoder_block(256*2, 128)
+        self.decoder3 = self.decoder_block(128*2, 64)
+        self.decoder4 = self.decoder_block(64*2, 32)
 
         # Output layer
-        self.output_layer = nn.ConvTranspose2d(32, out_channels, kernel_size=3, stride=2, padding=1, output_padding=1, bias=False)
+        self.output = self.output_layer(32*2,16*2,out_channels)
+
+
+    def output_layer(self,in_channels,middle_layer,out_channels):
+        return nn.Sequential(
+            nn.Conv2d(in_channels, middle_layer, kernel_size=3, padding=1),
+            nn.BatchNorm2d(middle_layer),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(middle_layer, out_channels, kernel_size=3, stride=2, padding=1, output_padding=1, bias=False),
+            nn.Sigmoid()
+        )
 
     def encoder_block(self, in_channels, out_channels):
         return nn.Sequential(
@@ -44,8 +54,10 @@ class UNet(nn.Module):
         e5 = self.encoder5(e4)
 
         x = self.decoder1(e5)
-        x = self.decoder2(x + e4)
-        x = self.decoder3(x + e3)
-        x = self.decoder4(x + e2)
-        output = self.output_layer(x)
-        return torch.sigmoid(output)
+        x = self.decoder2(torch.cat((x,e4),1))
+        x = self.decoder3(torch.cat((x,e3),1))
+        x = self.decoder4(torch.cat((x,e2),1))
+        
+        output = self.output(torch.cat((x,e1),1))
+
+        return output
