@@ -5,8 +5,9 @@ from tqdm import tqdm
 import os
 
 class Train_dataset(torch.utils.data.Dataset):
-    def __init__(self,augmentations,image_folder,mask_folder,device):
+    def __init__(self,height,augmentations,image_folder,mask_folder,device):
         self.image_folder = image_folder
+        self.height = height
         self.mask_folder = mask_folder
         self.transforms = augmentations
         self.images = os.listdir(image_folder)
@@ -20,7 +21,7 @@ class Train_dataset(torch.utils.data.Dataset):
         transformed = self.transforms(image=image, mask=mask)
         transformed_image = transformed['image']
         transformed_mask = transformed['mask']
-        transformed_mask = transformed_mask.reshape(512,512,1)
+        transformed_mask = transformed_mask.reshape(self.height,self.height,1)
         transformed_image = torch.Tensor(transformed_image)
         transformed_mask = torch.Tensor(transformed_mask)
         transformed_image = transformed_image.permute((2, 0, 1))
