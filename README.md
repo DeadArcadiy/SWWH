@@ -1,5 +1,6 @@
 # SWWH
 # Root Segmentation Project
+# Torch solution
 
 ## Project Overview
 The Root Segmentation Project aims to leverage deep learning techniques, specifically a custom U-Net architecture, for the segmentation of root structures in images. This project is vital for understanding root growth patterns, aiding in agricultural research and environmental studies.
