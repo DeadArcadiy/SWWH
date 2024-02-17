@@ -1,0 +1,7 @@
+path: 'yolo/'
+train: 'train/'
+val: 'val/'
+ 
+# class names
+nc: 1
+names: ['root']
