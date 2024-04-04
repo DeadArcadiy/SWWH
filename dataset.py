@@ -28,7 +28,6 @@ class Train_dataset(torch.utils.data.Dataset):
         ########################################################
         transformed_image = torch.Tensor(transformed_image)
         transformed_mask = torch.Tensor(transformed_mask)
-        print(transformed_mask.shape)
         ############################################
         transformed_image = transformed_image.permute((2, 0, 1))
         transformed_mask = transformed_mask.permute((2, 0, 1))
@@ -44,6 +43,7 @@ class Test_dataset(torch.utils.data.Dataset):
         self.transforms = augmentations
         self.images = os.listdir(image_folder)
         self.device = device
+        self.preprocess_input = preprocess_input
         print(self.images)
 
     def __getitem__(self,i):
@@ -51,9 +51,10 @@ class Test_dataset(torch.utils.data.Dataset):
         image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         transformed = self.transforms(image=image)
         transformed_image = transformed['image']
+        if self.preprocess_input:
+            transformed_image = self.preprocess_input(transformed_image)
         transformed_image = torch.Tensor(transformed_image)
         transformed_image = transformed_image.permute((2, 0, 1))
-        transformed_image /= 255
         return transformed_image.to(self.device)
             
     def __len__(self):
