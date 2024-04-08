@@ -8,8 +8,9 @@ The Root Segmentation Project aims to leverage deep learning techniques, specifi
 ## Features
 - Custom U-Net model implemented in Torch.
 - Integration with Albumentations for advanced image augmentations.
-- Utilization of `segmentation_models` for efficient segmentation tasks.
+- Loss function from BASNEt.
 - Data pipeline implementation for streamlined data processing and augmentation.
+- Also in this repository you can find TensorFlow implementation 
 
 ## Model Architecture
 The model is a U-Net architecture, known for its efficiency in image segmentation tasks. It includes an encoder-decoder structure with skip connections to capture both high and low-level image features.
@@ -25,16 +26,6 @@ Before running the project, ensure the following dependencies are installed:
 ```bash
 pip install torch torchvision numpy albumentations segmentation-models matplotlib opencv-python-headless wandb
 ```
-## Dataset
-
-The dataset consists of high-resolution images of root structures. The `DatasetCreator` class in `datapipeline.py` is used to preprocess and augment the images for training.
-
-## Training
-
-Training details:
-- TensorFlow as the backend.
-- Custom callbacks for monitoring and logging.
-- Wandb integration for experiment tracking.
 
 ## Results
 
