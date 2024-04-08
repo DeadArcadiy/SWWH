@@ -5,7 +5,7 @@ class UNet(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(UNet, self).__init__()
 
-        self.f = [32,64,128,256,512]
+        self.f = [32,32,64,64,128]
         # Encoder
         self.encoder1 = self.encoder_block(in_channels, self.f[0])
         self.encoder2 = self.encoder_block(self.f[0], self.f[1])
@@ -20,7 +20,7 @@ class UNet(nn.Module):
         self.decoder4 = self.decoder_block(self.f[1]*2, self.f[0])
 
         # Output layer
-        self.output = self.output_layer(32*2,16*2,out_channels)
+        self.output = self.output_layer(self.f[0]*2,self.f[0],out_channels)
 
 
     def output_layer(self,in_channels,middle_layer,out_channels):
@@ -55,18 +55,13 @@ class UNet(nn.Module):
         e4 = self.encoder4(e3)
         e5 = self.encoder5(e4)
         
-        print(e1.shape)
-        print(e2.shape)
-        print(e3.shape)
-        print(e4.shape)
-        print(e5.shape)
 
         x = self.decoder1(e5)
-        print(x.shape)
+
         x = self.decoder2(torch.cat((x,e4),1))
-        print(x.shape)
+
         x = self.decoder3(torch.cat((x,e3),1))
-        print(x.shape)
+
         x = self.decoder4(torch.cat((x,e2),1))
         
         output = self.output(torch.cat((x,e1),1))

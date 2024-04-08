@@ -1,7 +1,0 @@
-opencv-python
-Pillow==10.0.0
-numpy==1.25.1
-pandas==2.0.3
-matplotlib==3.7.2
-pytest-shutil==1.7.0
-tqdm==4.65.0
