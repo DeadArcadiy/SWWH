@@ -1,29 +1,36 @@
 import cv2
 import numpy as np
 
-# Load the segmented image
-segmented_image = cv2.imread('path_to_segmented_image.png', cv2.IMREAD_GRAYSCALE)
+# Load the segmented image (the mask)
+index = 3
 
-# Preprocess to make roots more distinct if necessary
-_, binary_image = cv2.threshold(segmented_image, 0.1, 255, cv2.THRESH_BINARY)
+segmented_image = cv2.imread('data/segmented_image' + str(index) + '.png', cv2.IMREAD_GRAYSCALE)
 
-# Function to find the starting points of roots
-def find_starting_points(binary_image):
-    # Implement logic to find starting points
-    # This could be the topmost pixel of each root
-    pass
+_, binary_image = cv2.threshold(segmented_image, 125, 255, cv2.THRESH_BINARY)
 
-# Function to trace the root from a starting point
-def trace_root(start_point, binary_image):
-    # Implement tracing logic here
-    # This could be a loop that moves down from the starting point, following the root
-    pass
+contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Main execution
-starting_points = find_starting_points(binary_image)
+def find_topmost_point(contour):
+    topmost = tuple(contour[contour[:, :, 1].argmin()][0])
+    return topmost
+
+min_contour_length = 50 
+
+# Filter contours by length and find the starting points
+filtered_contours = [cnt for cnt in contours if cv2.arcLength(cnt, True) > min_contour_length]
+starting_points = [find_topmost_point(contour) for contour in filtered_contours]
+
+print("Filtered starting points for tracing:", starting_points)
+
+original_image = cv2.imread('data/image' + str(index) + '.png')
+original_image = cv2.resize(original_image,(512,512))
+
+for contour in filtered_contours:
+    cv2.drawContours(original_image, [contour], -1, (255, 0, 0), 2)  # Blue contours
+
 for point in starting_points:
-    trace_root(point, binary_image)
+    cv2.circle(original_image, point, 5, (0, 255, 0), -1)  # Green starting points
 
-# (Optional) Visualize the trace
-# cv2.imshow("Traced Roots", binary_image)
-# cv2.waitKey(0)
+cv2.imshow('Starting Points', original_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
